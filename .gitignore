@@ -1,0 +1,6 @@
+.vscode
+veracode.json
+vcode-cli_workspace.code-workspace
+**/__pycache__
+**/local
+.pytest_cache/

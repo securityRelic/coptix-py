@@ -3,7 +3,7 @@ Sophos Cloud Optix Automation with Python
 
 ## Overview
 
-Notes and and code guidance for automating the use of the Sophos Cloud Optix REST API
+Notes and code guidance for automating the use of the Sophos Cloud Optix REST API
 
 ## Scope
 
@@ -43,7 +43,6 @@ Notes and and code guidance for automating the use of the Sophos Cloud Optix RES
 #### Use of Example Function:
   
   ```py
-
   my_files = [('files', (<file1>, open(<file1>, 'rb')), 'files', (<file2>, open(<file2>, 'rb')))]
   my_key = <-- from a secure spot ;)
   my_scan_id = iac_scan(my_files, my_key)
@@ -54,7 +53,7 @@ Notes and and code guidance for automating the use of the Sophos Cloud Optix RES
 
 Success
 
-```py
+```json
 200
 {"scan_id":"999999a9-9999-999a-9a9a-99999a99a9a9a9","summary":null}
 

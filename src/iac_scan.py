@@ -14,25 +14,25 @@ logging.basicConfig(format='coptix-py [%(levelname)s]: %(message)s', level=loggi
 def iac_scan(files: list, key: str) -> (str, bool):
     '''
     Function:
-    - With AuthN Key and IaC file(s) test IaC with Cloud Optix scan API
+        With AuthN Key and IaC file(s) test IaC with Cloud Optix scan API
 
     Preconditions:
-    - Caller supplies multipart file as list or tuple (files) and authentication key (key)
-    - Basic validation:
-        - Authentication key (key) validated as string (TypeError) and key format (ValueError)
-        - Multipart file list (files) validated as list or tuple (TypeError)
+        - Caller supplies multipart file as list or tuple (files) and authentication key (key)
+        - Basic validation:
+            - Authentication key (key) validated as string (TypeError) and key format (ValueError)
+            - Multipart file list (files) validated as list or tuple (TypeError)
 
     Postconditions:
-    - With successful (200 status code) API call and return, extract 'scan_id' and return to caller (type str)
-    - On none 200 status return False to caller (type bool)
-        - 400: ApiKey not provided
-        - 400: Unable to retrieve user (When API key cannot be linked to a customer)
-        - 400: Proper arguments not provided (When one/more of the mandatory params is not provided properly)
-        - 401: Unauthorized access or ApiKey expired
-        - 404: No message available (Api resource could not be found)
+        - With successful (200 status code) API call and return, extract 'scan_id' and return to caller (type str)
+        - On none 200 status return False to caller (type bool)
+            - 400: ApiKey not provided
+            - 400: Unable to retrieve user (When API key cannot be linked to a customer)
+            - 400: Proper arguments not provided (When one/more of the mandatory params is not provided properly)
+            - 401: Unauthorized access or ApiKey expired
+            - 404: No message available (Api resource could not be found)
     '''
     if not isinstance(key, str):
-        logging.exception('Key not of correct type')
+        logging.exception('Authenticaiton key not of correct type')
         raise TypeError
 
     if not re.match('[a-z0-9]{8}\\-[a-z0-9]{4}\\-[a-z0-9]{4}\\-[a-z0-9]{4}\\-[a-z0-9]{12}', key):
@@ -40,11 +40,11 @@ def iac_scan(files: list, key: str) -> (str, bool):
         raise ValueError
 
     if not isinstance(files, (list, tuple)):
-        logging.exception('Files not of correct type')
+        logging.exception('Files Header is not of correct type')
         raise TypeError
 
     api_endpoint = 'https://optix.sophos.com/api/v1/iac/scan'
-    coptix_key_mod = ''.join(['ApiKey', ' ', key])
+    coptix_key_mod = ' '.join(['ApiKey', key])
     api_authn = {'Authorization': coptix_key_mod}
 
     try:
@@ -58,9 +58,8 @@ def iac_scan(files: list, key: str) -> (str, bool):
             api_text = json.loads(api_call.text)
             return api_text['scan_id']
 
-        logging.error('API call failed: {} {}'.format(api_call.status_code, api_call.text))
+        logging.error('Call Failed to Cloud Optix API endpoint: {} {}'.format(api_call.status_code, api_call.text))
         return False
 
     except Exception:
-        logging.error('Exception: API endpoint call failed')
-        raise
+        logging.error('Exception: Call Failed to Cloud Optix API endpoint')
